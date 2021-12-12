@@ -2,6 +2,9 @@ import { Injectable } from "@nestjs/common";
 import { partition } from "../../utils/common";
 import { RedisService } from "../../redis.service";
 import { CryptoService } from "../crypto/crypto.service";
+import { LinkInfoKeys } from "src/shared/typings";
+import { LinkInfoIncorrectPassError, LinkInfoNotFoundError, LinkInfoNotSavedError } from "./links.errors";
+import { projectTypes } from "src/server/utils/redis";
 
 type LinkInfo = {
   destination: string;
@@ -64,7 +67,8 @@ export class LinksService {
   public async checkIfExists(destination: string) {
     const hash = this.hashLink(destination)
     const key = this.constructRedisKey(hash)
-    return await this.redis.exists(key)
+    const exists = await this.redis.getObjectField(key, LinkInfoKeys.HASH)
+    return exists || false
   }
 
   public async addNewLink(destination: string){
@@ -76,12 +80,44 @@ export class LinksService {
       hash
     }
     const key = this.constructRedisKey(hash)
-    return this.redis.setPlainObject(key, newLink)
+    const saved = await this.redis.setPlainObject(key, newLink)
+    if (!saved) throw new LinkInfoNotSavedError(`LinkInfo with destination=${destination} was not saved successfully`)
+    return newLink
   }
 
   public async getLinkInfo(hash: string) {
     const key = this.constructRedisKey(hash)
-    return this.redis.getPlainObject<LinkInfo>(key)
+    const o = await this.redis.getPlainObject<LinkInfo>(key)
+    return Object.keys(o).length === 0 ? undefined : o
+  }
+  public async getDestination(hash: string) {
+    const key = this.constructRedisKey(hash)
+    return this.redis.getObjectField(key, LinkInfoKeys.DESTINATION)
+  }
+
+  public async assertPasswords(key: string, pass: string){
+    const correctPass = await this.redis.getObjectField(key, LinkInfoKeys.PASS)
+    if (!correctPass) throw new LinkInfoNotFoundError()
+    if (correctPass !== pass) throw new LinkInfoIncorrectPassError()
+    return true
+  }
+
+  public async deleteLink(hash: string, pass: string) {
+    const key = this.constructRedisKey(hash)
+    await this.assertPasswords(key, pass)
+    return this.redis.remove(key)
+  }
+
+  public async incrementViews(hash: string) {
+    const key = this.constructRedisKey(hash)
+    const views = await this.redis.getObjectField(key, LinkInfoKeys.VIEWS)
+    return this.redis.setObjectField(key, LinkInfoKeys.VIEWS, +views+1)
+  }
+
+  public async getStats(hash: string, pass: string) {
+    const key = this.constructRedisKey(hash)
+    await this.assertPasswords(key, pass)
+    return this.redis.getPlainObject<LinkInfo>(key).then((obj) => projectTypes(obj, { views: Number }))
   }
 
 }

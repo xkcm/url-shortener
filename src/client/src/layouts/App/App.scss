@@ -1,0 +1,14 @@
+@import "../../theme.scss";
+
+#app-container{
+  width: 100%;
+  min-height: 100vh;
+  background-color: $backgroundColor;
+  color: $fontColor;
+  position: relative;
+  #signature {
+    position: absolute;
+    left: 1rem;
+    bottom: .5rem;
+  }
+}

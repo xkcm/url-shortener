@@ -11,6 +11,13 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "rootDirs": [
+      "./src/server",
+      "./src/shared"
+    ]
+  },
+  "exclude": [
+    "./src/client"
+  ]
 }

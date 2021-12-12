@@ -1,0 +1,42 @@
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@200;400&display=swap');
+@import "./theme.scss";
+
+body {
+  margin: 0;
+  font-family: 'Mukta';
+}
+
+h1,h2,h3,h4,h5,h6{
+  margin: 0;
+  padding: 0;
+}
+h1 { font-size: 4.5rem; }
+h2 { font-size: 3rem; }
+h3 { font-size: 2.4rem; }
+h4 { font-size: 1.8rem; }
+h5 { font-size: 1.4rem; }
+h6 { font-size: 1.2rem; }
+
+input {
+  border: none;
+  outline: none;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  width: 100%;
+  font-size: 1.2rem;
+  color: $fontColor;
+  font-family: 'Mukta';
+  &::placeholder {
+    color: darken($fontColor, 20%);
+  }
+}
+button {
+  border: none;
+  outline: none;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  font-size: 1.2rem;
+}
