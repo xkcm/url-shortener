@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, Post, Res } from "@nestjs/common";
-import { resolveSoa } from "dns";
 import { Response } from "express";
 import { LinkInfoIncorrectPassError, LinkInfoNotFoundError } from "./links.errors";
 import { LinksService } from "./links.service";

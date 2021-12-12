@@ -2,16 +2,9 @@ import { Injectable } from "@nestjs/common";
 import { partition } from "../../utils/common";
 import { RedisService } from "../../redis.service";
 import { CryptoService } from "../crypto/crypto.service";
-import { LinkInfoKeys } from "src/shared/typings";
+import { LinkInfo, LinkInfoKeys } from "src/shared/typings";
 import { LinkInfoIncorrectPassError, LinkInfoNotFoundError, LinkInfoNotSavedError } from "./links.errors";
 import { projectTypes } from "src/server/utils/redis";
-
-type LinkInfo = {
-  destination: string;
-  views: number;
-  pass: string;
-  hash: string;
-};
 
 @Injectable()
 export class LinksService {
