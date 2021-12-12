@@ -9,12 +9,14 @@ export class LinksController {
 
   @Post()
   public async generateLink(
-    @Body('destination') destinationLink: string
+    @Body('destination') destinationLink: string,
+    @Res() res: Response
   ){
+    if (!destinationLink) return res.status(400).end()
     const exists = await this.linksService.checkIfExists(destinationLink)
-    if (exists) return { hash: exists }
+    if (exists) return res.status(200).json({ hash: exists }).end()
     const info = await this.linksService.addNewLink(destinationLink)
-    return info
+    return res.json(info).end()
   }
 
   @Get()
