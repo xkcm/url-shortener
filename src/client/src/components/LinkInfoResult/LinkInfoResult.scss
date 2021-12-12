@@ -1,0 +1,58 @@
+@import "../../theme.scss";
+
+.result-container{
+  >div:not(:last-child){
+    margin-bottom: 1em;
+  }
+  .info-container{
+    display: flex;
+    height: 3.5rem;
+    border-radius: 3px;
+    overflow: hidden;
+
+    span.text{
+      background-color: $resultInfoURL;
+      padding: 0.6rem 1.2rem;
+      box-sizing: border-box;
+      flex-grow: 1;
+      font-family: 'Mukta';
+      font-size: 1.2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+    }
+    .icon{
+      align-self: stretch;
+      aspect-ratio: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: $resultInfoClipboard;
+      &.clipboard {
+        cursor: pointer;
+        transition: background-color .05s ease-in-out;
+
+        &:hover{
+          background-color: darken($resultInfoClipboard, 4%);
+        }
+        &:active{
+          background-color: darken($resultInfoClipboard, 8%);
+        }
+        &.copied {
+          background-color: $resultInfoClipboardCopied;
+        }
+      }
+    }
+  }
+  .full-url {
+    .icon:first-child{
+      background-color: $urlIcon;
+    }
+  }
+  .password {
+    .icon:first-child {
+      background-color: $passIcon;
+    }
+  }
+}

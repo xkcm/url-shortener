@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react"
-import { initiateConfiguration } from "../../config"
+import { initiateConfiguration } from "app-shared/config"
 import { Home } from "../Home/Home"
 import "./App.scss"
+import { Config } from "../../common"
 
 export default function App(){
 
@@ -9,8 +10,11 @@ export default function App(){
 
   const initApp = async () => {
     let status = true
-
-    status = status && await initiateConfiguration()
+    
+    status = status && await initiateConfiguration([
+      [Config.HTTP_ENDPOINT, process.env.REACT_APP_HTTP_ENDPOINT],
+      [Config.APP_URL, window.location.origin]
+    ])
 
     return status
   }
@@ -31,6 +35,6 @@ export default function App(){
         by xkcm
       </div>
     </div>
-    : <span>to chuj</span>
+    : <span>loading</span>
   )
 }
