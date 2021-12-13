@@ -1,0 +1,33 @@
+$diameter: 1.2em;
+$dotColor: #2B2D42;
+
+.loading-dots__container{
+  display: flex;
+  padding: 1em 2em;
+  .loading-dots__dot {
+    height: $diameter;
+    width: $diameter;
+    border-radius: 50%;
+    background-color: $dotColor;
+    margin: 0 .4em;
+    animation: scaleBounce .9s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+    &.dot--2 {
+      animation-delay: .15s;
+    }
+    &.dot--3 {
+      animation-delay: .3s;
+    }
+  }
+}
+
+@keyframes scaleBounce {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

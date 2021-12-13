@@ -6,6 +6,7 @@
   background-color: $backgroundColor;
   color: $fontColor;
   position: relative;
+  overflow-x: hidden;
   #signature {
     position: absolute;
     left: 1rem;

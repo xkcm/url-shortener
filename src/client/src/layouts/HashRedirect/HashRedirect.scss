@@ -1,0 +1,18 @@
+@import "../../theme.scss";
+
+.redirection-info__container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  .app-name {
+    position: absolute;
+    left: 1rem;
+    bottom: 2rem;
+  }
+  .destination {
+    color: $urlIcon;
+  }
+}

@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react"
 import { initiateConfiguration } from "app-shared/config"
+import React, { useEffect, useState } from "react"
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
+import { Config } from "../../common"
+import HashRedirect from "../HashRedirect/HashRedirect"
 import { Home } from "../Home/Home"
 import "./App.scss"
-import { Config } from "../../common"
 
 export default function App(){
 
@@ -28,9 +30,14 @@ export default function App(){
   }, [])
 
   return (
-    appReady
-    ? <div id="app-container">
-      <Home/>
+    appReady ?
+    <div id="app-container">
+      <Router>
+        <Routes>
+          <Route index element={<Home/>} />
+          <Route path=":hash" element={<HashRedirect/>} />
+        </Routes>
+      </Router>
       <div id="signature">
         by xkcm
       </div>
