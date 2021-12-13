@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Res } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Post, Query, Res } from "@nestjs/common";
 import { Response } from "express";
 import { LinkInfoIncorrectPassError, LinkInfoNotFoundError } from "./links.errors";
 import { LinksService } from "./links.service";
@@ -21,7 +21,7 @@ export class LinksController {
 
   @Get()
   public async getLink(
-    @Body('hash') hash: string,
+    @Query('hash') hash: string,
     @Res() res: Response
   ){
     const destination = await this.linksService.getDestination(hash)
