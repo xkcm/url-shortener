@@ -1,5 +1,6 @@
 import { LinkInfo } from "app-shared/typings"
 import React, { CSSProperties, useState } from "react"
+import CornerInfo from "../../components/CornerInfo/CornerInfo"
 import Icon from "../../components/Icon/Icon"
 import Input from "../../components/Input/Input"
 import LinkInfoResult from "../../components/LinkInfoResult/LinkInfoResult"
@@ -45,21 +46,24 @@ export function Home(){
   }
 
   return (
-    <div id="home-container">
-      <div id="center-content">
-        <div id="home-header">
-          <h2>url-shortener</h2>
-          <p>URL shortening service using cryptographic functions</p>
+    <>
+      <CornerInfo/>
+      <div id="home-container">
+        <div id="center-content">
+          <div id="home-header">
+            <h2>url-shortener</h2>
+            <p>URL shortening service using cryptographic functions</p>
+          </div>
+            { linkInfo === undefined ?
+              <Wrapper.Overlay overlayVisible={overlayVisible} overlayStyle={overlayStyle}>
+                <Tooltip position="left" text="URL is invalid" visible={tooltipVisible} dense>
+                  <Input placeholder="Your link goes here" onFocus={() => setTooltipVisible(false)} onSubmit={getHash} buttonContent={<Icon size={36}>chevron_right</Icon>}></Input>
+                </Tooltip>
+              </Wrapper.Overlay> :
+              <LinkInfoResult linkInfo={linkInfo}/>
+            }
         </div>
-          { linkInfo === undefined ?
-            <Wrapper.Overlay overlayVisible={overlayVisible} overlayStyle={overlayStyle}>
-              <Tooltip position="left" text="URL is invalid" visible={tooltipVisible} dense>
-                <Input placeholder="Your link goes here" onFocus={() => setTooltipVisible(false)} onSubmit={getHash} buttonContent={<Icon size={36}>chevron_right</Icon>}></Input>
-              </Tooltip>
-            </Wrapper.Overlay> :
-            <LinkInfoResult linkInfo={linkInfo}/>
-          }
       </div>
-    </div>
+    </>
   )
 }

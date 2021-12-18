@@ -2,13 +2,14 @@
 // configuration keys
 export enum Config {
   HTTP_ENDPOINT,
-  APP_URL
+  APP_URL,
+  VERSION
 }
 
-// errors
+// === Errors ===
 
-// HashRedirect
 export class UndefinedHashError extends Error {}
+export class IncorrectPasswordError extends Error {}
 
 // HttpClient
 export class EndpointNotDefinedError extends Error {}

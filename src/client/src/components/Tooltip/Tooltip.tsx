@@ -1,5 +1,5 @@
 import classNames from "classnames"
-import React, { FC, useEffect, useRef } from "react"
+import React, { FC, useEffect, useRef, useState } from "react"
 import "./Tooltip.scss"
 
 
@@ -10,23 +10,24 @@ interface TooltipProps {
   nudge?: [number, number];
   dense?: boolean;
   hide?: number;
+  visibleOnHover?: boolean;
 }
 
-const Tooltip: FC<TooltipProps> & { Clipboard: typeof Clipboard } = ({ children, visible, position, text, nudge, dense, hide }) => {
+const Tooltip: FC<TooltipProps> & { Clipboard: typeof Clipboard } = ({ children, visibleOnHover, visible: pVisible, position, text, nudge, dense, hide }) => {
 
   const translateNudge = nudge || [0,0]
   const innerContainer = useRef<HTMLDivElement>(null)
+  const [hovered, setHovered] = useState(false)
+  const visible = pVisible ?? true
 
   useEffect(() => {
     let timeout: NodeJS.Timeout
 
-    if (innerContainer.current) innerContainer.current.style.animationName = "scaleIn"
+    openTooltip()
 
     if (hide !== undefined) {
       timeout = setTimeout(() => {
-        if (innerContainer.current) {
-          innerContainer.current.style.animationName = "scaleOut";
-        }
+        closeTooltip()
       }, Math.max(hide - 200, hide))
     }
 
@@ -35,11 +36,32 @@ const Tooltip: FC<TooltipProps> & { Clipboard: typeof Clipboard } = ({ children,
     }
   }, [hide, visible])
 
+  const openTooltip = () => {
+    if (innerContainer.current) innerContainer.current.style.animationName = "scaleIn"
+  }
+  const closeTooltip = () => {
+    if (innerContainer.current) innerContainer.current.style.animationName = "scaleOut";
+  }
+
+  const hoverEnter = () => {
+    setHovered(true)
+    if (visibleOnHover) openTooltip()
+  }
+
+  const hoverLeave = () => {
+    setHovered(false)
+    if (visibleOnHover) closeTooltip()
+  }
+
+  const canBeDisplayed = () => visible && ((visibleOnHover && hovered) || !visibleOnHover)
+
   return (
     <div className="tooltip__outer-container">
-      { children }
-      { visible &&
-        <div className={`tooltip__${position || 'top'} tooltip__container`} style={{ display: !visible ? "none" : "block" }}>
+      <div className="tooltip__wrapped-content" onMouseEnter={hoverEnter} onMouseLeave={hoverLeave}>
+        { children }
+      </div>
+      { canBeDisplayed() &&
+        <div className={`tooltip__${position || 'top'} tooltip__container`} style={{ display: !canBeDisplayed() ? "none" : "block" }}>
           <div style={{ transform: `translate(${translateNudge[0]}px, ${translateNudge[1]}px)` }} className={classNames(`tooltip__body`, { 'tooltip__dense': dense })}>
             <div ref={innerContainer} className="tooltip__inner-container">
               <span className="tooltip__text">
@@ -54,6 +76,7 @@ const Tooltip: FC<TooltipProps> & { Clipboard: typeof Clipboard } = ({ children,
 }
 
 const Clipboard: FC<Partial<TooltipProps>> = ({ children, ...props }) => <Tooltip text="Copied to clipboard!" position="right" hide={3000} dense {...props}> { children } </Tooltip>
+
 
 Tooltip.Clipboard = Clipboard
 

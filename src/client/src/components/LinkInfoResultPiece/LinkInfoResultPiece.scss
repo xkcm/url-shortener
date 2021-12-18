@@ -1,0 +1,39 @@
+@import "../../theme.scss";
+
+.info-container{
+  background-color: $resultInfoText;
+  display: flex;
+  height: 3.5rem;
+  border-radius: 3px;
+  overflow: hidden;
+
+  span.text{
+    padding: 0.6rem 1.2rem;
+    box-sizing: border-box;
+    flex-grow: 1;
+    font-family: 'Mukta';
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .icon{
+    align-self: stretch;
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+    &.clipboard {
+      cursor: pointer;
+      transition: background-color .05s ease-in-out;
+
+      &:hover{
+        background-color: rgba(255,255,255,0.05);
+      }
+      &:active{
+        background-color: $resultInfoClipboardCopied;
+      }
+    }
+  }
+}

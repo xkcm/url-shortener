@@ -1,5 +1,6 @@
 import { LinkInfo } from "app-shared/typings"
 import * as HttpClient from "../clients/HttpClient"
+import { IncorrectPasswordError, UndefinedHashError } from "../common"
 
 export async function fetchHash(destination: string) {
   const endpoint_url = "link"
@@ -20,4 +21,15 @@ export async function getDestination(hash: string) {
   })
   if (result.status === 404) return null
   return result.data.destination
+}
+
+export async function getStats(hash: string, pass: string) {
+  const result = await HttpClient.fetch<LinkInfo>({
+    url: "link/stats",
+    params: { hash, pass },
+    method: "GET"
+  })
+  if (result.status === 403) throw new IncorrectPasswordError(`Password "${pass}" for hash "${hash}" is incorrect`)
+  if (result.status === 404) throw new UndefinedHashError(`Hash "${hash}" is undefined`)
+  return result.data
 }

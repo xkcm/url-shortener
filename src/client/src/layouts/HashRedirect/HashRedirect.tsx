@@ -1,7 +1,9 @@
+import { config } from "app-shared/config"
 import React, { FC, useEffect, useRef, useState } from "react"
 import { useCallback } from "react"
 import { useParams } from "react-router-dom"
 import { UndefinedHashError } from "../../common"
+import CornerInfo from "../../components/CornerInfo/CornerInfo"
 import LoadingDots from "../../components/LoadingDots/LoadingDots"
 import { getDestination } from "../../services/Links.service"
 
@@ -44,27 +46,28 @@ const HashRedirect: FC = () => {
   useEffect(() => {
     if (time === 0 && interval.current && !!destination) {
       clearInterval(interval.current)
-      properRedirect(destination as string)
+      if (config('PRODUCTION')) properRedirect(destination as string)
     }
   }, [time, destination])
 
   return (
-    <div className="redirection-info__container">
-      <h5 className="app-name">
-        <a href="/">url-shortener</a>
-      </h5>
-      { !!destination ?
-      <>
-        <h2>{jobInfo}</h2>
-        <div>You will be automatically redirected to <span className="destination"><a href={destination}>{destination}</a></span> in <span>{time}</span>s...</div> 
-      </> :
-        <h2>{jobInfo}</h2>
-      }
-      { !errorInfo ?
-        <LoadingDots/> :
-        <span>{errorInfo}</span>
-      }
-    </div>
+    <>
+      <CornerInfo appName/>
+      <div className="redirection-info__container">
+        
+        { !!destination ?
+        <>
+          <h2>{jobInfo}</h2>
+          <div>You will be automatically redirected to <span className="destination"><a href={destination}>{destination}</a></span> in <span>{time}</span>s...</div> 
+        </> :
+          <h2>{jobInfo}</h2>
+        }
+        { !errorInfo ?
+          <LoadingDots/> :
+          <span>{errorInfo}</span>
+        }
+      </div>
+    </>
   )
 }
 

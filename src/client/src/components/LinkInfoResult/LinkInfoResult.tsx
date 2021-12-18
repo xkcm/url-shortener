@@ -2,16 +2,18 @@ import { config } from "app-shared/config"
 import { LinkInfo } from "app-shared/typings"
 import React, { FC, useState } from "react"
 import { Config } from "../../common"
-import Icon from "../Icon/Icon"
+import LinkInfoResultPiece from "../LinkInfoResultPiece/LinkInfoResultPiece"
 import Tooltip from "../Tooltip/Tooltip"
-
 import "./LinkInfoResult.scss"
+
+
+const resolveURL = (base: string, url: string) => new URL(url, base).href+'/'
 
 const LinkInfoResult: FC<{ linkInfo: LinkInfo }> = ({ linkInfo }) => {
 
   const [tooltipVisible, setVisibleTooltip] = useState<number>()
 
-  const fullUrl = new URL(linkInfo.hash, config(Config.APP_URL)).href
+  const fullUrl = resolveURL(config(Config.APP_URL), linkInfo.hash)
   const islinkOwnedByUser = "pass" in linkInfo
 
   const copyToClipboard = async (content: string, tooltipIndex: number) => {
@@ -20,33 +22,24 @@ const LinkInfoResult: FC<{ linkInfo: LinkInfo }> = ({ linkInfo }) => {
     setVisibleTooltip(tooltipIndex)
   }
 
+  const hashStats = resolveURL(fullUrl, 'stats')
+
   return (
     <div className="result-container">
       <Tooltip.Clipboard visible={tooltipVisible === 0}>
-        <div className="full-url info-container">
-          <div className="icon">
-            <Icon size={28}>link</Icon>
-          </div>
-          <span className="text">
-            <a href={fullUrl}>{fullUrl}</a>
-          </span>
-          <div className="icon clipboard" onClick={() => copyToClipboard(fullUrl, 0)}>
-            <Icon size={28}>content_copy</Icon>
-          </div>
-        </div>
+        <LinkInfoResultPiece className="full-url" icon="link" text={fullUrl} allowCopying={true} copyCallback={(content) => copyToClipboard(content, 0)}/>
       </Tooltip.Clipboard>
       { islinkOwnedByUser ?
-        <Tooltip.Clipboard visible={tooltipVisible === 1}>
-          <div className="password info-container">
-            <div className="icon">
-              <Icon size={28}>key</Icon>
-            </div>
-            <span className="text">{linkInfo.pass}</span>
-            <div className="icon clipboard" onClick={() => copyToClipboard(linkInfo.pass, 1)}>
-              <Icon size={28}>content_copy</Icon>
-            </div>
+        <>
+          <Tooltip text="Use this key to unlock the hash stats" position="left" dense visibleOnHover visible>
+            <Tooltip.Clipboard visible={tooltipVisible === 1}>
+              <LinkInfoResultPiece className="password" icon="key" text={linkInfo.pass} allowCopying={true} copyCallback={(content) => copyToClipboard(content, 1)}/>
+            </Tooltip.Clipboard>
+          </Tooltip>
+          <div className="hash-stats">
+            You can view the hash stats at <a href={hashStats}>{hashStats}</a> using the provided key.
           </div>
-        </Tooltip.Clipboard> :
+        </> :
         <div className="link-already-created-message">
           Someone has already generated hash for this link, you can use it but you will not have access to the hash stats.
         </div>
