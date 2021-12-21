@@ -48,8 +48,8 @@ export class LinksController {
 
   @Get('stats')
   public async getStats(
-    @Body('hash') hash: string,
-    @Body('pass') pass: string,
+    @Query('hash') hash: string,
+    @Query('pass') pass: string,
     @Res() res: Response
   ){
     try {
