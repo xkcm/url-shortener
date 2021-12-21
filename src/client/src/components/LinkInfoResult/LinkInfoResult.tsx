@@ -27,13 +27,17 @@ const LinkInfoResult: FC<{ linkInfo: LinkInfo }> = ({ linkInfo }) => {
   return (
     <div className="result-container">
       <Tooltip.Clipboard visible={tooltipVisible === 0}>
-        <LinkInfoResultPiece className="full-url" icon="link" text={fullUrl} allowCopying={true} copyCallback={(content) => copyToClipboard(content, 0)}/>
+        <LinkInfoResultPiece className="full-url" icon="link" allowCopying={true} copyCallback={() => copyToClipboard(fullUrl, 0)}>
+          <a href={fullUrl}>{fullUrl}</a>
+        </LinkInfoResultPiece>
       </Tooltip.Clipboard>
       { islinkOwnedByUser ?
         <>
           <Tooltip text="Use this key to unlock the hash stats" position="left" dense visibleOnHover visible>
             <Tooltip.Clipboard visible={tooltipVisible === 1}>
-              <LinkInfoResultPiece className="password" icon="key" text={linkInfo.pass} allowCopying={true} copyCallback={(content) => copyToClipboard(content, 1)}/>
+              <LinkInfoResultPiece className="password" icon="key" allowCopying={true} copyCallback={() => copyToClipboard(linkInfo.pass, 1)}>
+                {linkInfo.pass}
+              </LinkInfoResultPiece>
             </Tooltip.Clipboard>
           </Tooltip>
           <div className="hash-stats">

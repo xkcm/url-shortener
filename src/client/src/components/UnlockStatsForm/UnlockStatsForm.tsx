@@ -2,6 +2,8 @@ import React, { FC } from "react"
 import Icon from "../Icon/Icon"
 import Input from "../Input/Input"
 
+import "./UnlockStatsForm.scoped.scss"
+
 interface UnlockStatsFormProps {
   onSubmit: (pass: string) => any
 }

@@ -1,6 +1,6 @@
 import { LinkInfo } from "app-shared/typings"
 import * as HttpClient from "../clients/HttpClient"
-import { IncorrectPasswordError, UndefinedHashError } from "../common"
+import { IncorrectPasswordError, UndefinedHashError, UnknownError } from "../common"
 
 export async function fetchHash(destination: string) {
   const endpoint_url = "link"
@@ -29,7 +29,20 @@ export async function getStats(hash: string, pass: string) {
     params: { hash, pass },
     method: "GET"
   })
+  if (result.status === 200) return result.data
   if (result.status === 403) throw new IncorrectPasswordError(`Password "${pass}" for hash "${hash}" is incorrect`)
   if (result.status === 404) throw new UndefinedHashError(`Hash "${hash}" is undefined`)
-  return result.data
+  throw new UnknownError("Some unknown error occurred")
+}
+
+export async function deleteHash(hash: string, pass: string) {
+  const result = await HttpClient.fetch({
+    url: "link",
+    method: "DELETE",
+    data: { hash, pass }
+  })
+  if (result.status === 200) return true
+  if (result.status === 403) throw new IncorrectPasswordError(`Password "${pass}" for hash "${hash}" is incorrect`)
+  if (result.status === 404) throw new UndefinedHashError(`Hash "${hash}" is undefined`)
+  throw new UnknownError("Some unknown error occurred")
 }

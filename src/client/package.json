@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "@craco/craco": "^6.4.3",
+    "craco-plugin-scoped-css": "^1.1.1",
     "sass": "^1.44.0",
     "ts-loader": "~8.2.0"
   }

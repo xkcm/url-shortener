@@ -1,13 +1,12 @@
 import { LinkInfo } from "app-shared/typings";
-import React, { FC, useState } from "react";
+import React, { FC, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { UndefinedHashError } from "../../common";
+import { IncorrectPasswordError, PromiseValue, UndefinedHashError } from "../../common";
 import CornerInfo from "../../components/CornerInfo/CornerInfo";
 import HashStatsResult from "../../components/HashStatsResult/HashStatsResult";
 import UnlockStatsForm from "../../components/UnlockStatsForm/UnlockStatsForm";
-import { getStats } from "../../services/Links.service";
+import { deleteHash, getStats } from "../../services/Links.service";
 import "./HashStats.scss";
-
 
 const HashStats: FC = () => {
 
@@ -15,6 +14,7 @@ const HashStats: FC = () => {
   const [unlocked, setUnlocked] = useState(false)
   const [error, setError] = useState<string>()
   const [hashStats, setHashStats] = useState<LinkInfo>()
+  const password = useRef<string>()
 
   const throwError = (error: Error) => {
     setError(error.message)
@@ -27,7 +27,18 @@ const HashStats: FC = () => {
       const hashStats = await getStats(hash, pass)
       setUnlocked(true)
       setHashStats(hashStats)
-    } catch (e) { throwError(e as Error) }
+      password.current = pass
+    } catch (e) {
+      throwError(e as Error)
+    }
+  }
+
+  const hashDelete = async () => {
+    if (!password.current) return throwError(new IncorrectPasswordError("Password is undefined"))
+    if (!hash) return throwError(new UndefinedHashError("Hash was not provided"))
+    await deleteHash(hash, password.current)
+      .then(() => setError("Hash was successfully deleted"))
+      .catch(throwError)
   }
 
   return (
@@ -42,7 +53,7 @@ const HashStats: FC = () => {
             </div>
           }
           { !unlocked  && !error && <UnlockStatsForm onSubmit={unlockHashStats}/> }
-          { unlocked && !error && hashStats && <HashStatsResult hashStats={hashStats}/> }
+          { unlocked && !error && hashStats && <HashStatsResult hashStats={hashStats} onHashDelete={hashDelete}/> }
         </div>
       </div>
     </>
