@@ -1,18 +1,10 @@
 version: "3.7"
 services:
-  redis:
+  redis-server:
     image: redis
-    volumes:
-      - ./redis_data:/data
-    ports:
-      - 6379:6379
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - 8888:8888
+    build: .
     depends_on:
-      - redis
-    links:
-      - redis
+      - redis-server
+    ports:
+      - 3000:3000    

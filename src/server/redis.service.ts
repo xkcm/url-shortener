@@ -1,13 +1,16 @@
 import { Inject, Injectable, Provider } from "@nestjs/common";
 import { createClient } from "redis";
+import { ConfigService } from "@nestjs/config"
 
 export const RedisConnectionProvider: Provider = {
   provide: 'REDIS_CONNECTION',
-  useFactory: async () => {
-    const client = await createClient()
+  useFactory: async (configService: ConfigService) => {
+    const url = `redis://${configService.get<string>('DB_HOST')}:${configService.get<number>('DB_PORT')}`
+    const client = await createClient({ url })
     await client.connect()
     return client
-  }
+  },
+  inject: [ConfigService]
 }
 
 @Injectable()

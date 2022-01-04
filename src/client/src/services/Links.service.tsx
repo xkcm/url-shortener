@@ -30,9 +30,9 @@ export async function getStats(hash: string, pass: string) {
     method: "GET"
   })
   if (result.status === 200) return result.data
-  if (result.status === 403) throw new IncorrectPasswordError(`Password "${pass}" for hash "${hash}" is incorrect`)
-  if (result.status === 404) throw new UndefinedHashError(`Hash "${hash}" is undefined`)
-  throw new UnknownError("Some unknown error occurred")
+  if (result.status === 403) throw new IncorrectPasswordError({ pass, hash })
+  if (result.status === 404) throw new UndefinedHashError({ hash })
+  throw new UnknownError()
 }
 
 export async function deleteHash(hash: string, pass: string) {
@@ -42,7 +42,7 @@ export async function deleteHash(hash: string, pass: string) {
     data: { hash, pass }
   })
   if (result.status === 200) return true
-  if (result.status === 403) throw new IncorrectPasswordError(`Password "${pass}" for hash "${hash}" is incorrect`)
-  if (result.status === 404) throw new UndefinedHashError(`Hash "${hash}" is undefined`)
-  throw new UnknownError("Some unknown error occurred")
+  if (result.status === 403) throw new IncorrectPasswordError({ pass, hash })
+  if (result.status === 404) throw new UndefinedHashError({ hash })
+  throw new UnknownError()
 }

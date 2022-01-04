@@ -14,10 +14,10 @@ $diameter: 1.2em;
     margin: 0 .4em;
     animation: scaleBounce $time cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
     &.dot--2 {
-      animation-delay: $time/6;
+      animation-delay: calc($time / 6);
     }
     &.dot--3 {
-      animation-delay: $time/3;
+      animation-delay: calc($time / 3);
     }
   }
 }

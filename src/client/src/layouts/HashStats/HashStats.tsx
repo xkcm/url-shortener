@@ -1,7 +1,7 @@
 import { LinkInfo } from "app-shared/typings";
 import React, { FC, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { IncorrectPasswordError, PromiseValue, UndefinedHashError } from "../../common";
+import { HashNotProvidedError, IncorrectPasswordError } from "../../common";
 import CornerInfo from "../../components/CornerInfo/CornerInfo";
 import HashStatsResult from "../../components/HashStatsResult/HashStatsResult";
 import UnlockStatsForm from "../../components/UnlockStatsForm/UnlockStatsForm";
@@ -22,7 +22,7 @@ const HashStats: FC = () => {
   }
 
   const unlockHashStats = async (pass: string) => {
-    if (!hash) return throwError(new UndefinedHashError("Hash was not provided"))
+    if (!hash) return throwError(new HashNotProvidedError())
     try {
       const hashStats = await getStats(hash, pass)
       setUnlocked(true)
@@ -34,8 +34,8 @@ const HashStats: FC = () => {
   }
 
   const hashDelete = async () => {
-    if (!password.current) return throwError(new IncorrectPasswordError("Password is undefined"))
-    if (!hash) return throwError(new UndefinedHashError("Hash was not provided"))
+    if (!hash) return throwError(new HashNotProvidedError())
+    if (!password.current) return throwError(new IncorrectPasswordError({ pass: '', hash }))
     await deleteHash(hash, password.current)
       .then(() => setError("Hash was successfully deleted"))
       .catch(throwError)

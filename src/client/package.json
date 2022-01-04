@@ -18,13 +18,15 @@
     "react-router-dom": "^6.1.1",
     "react-scripts": "4.0.3",
     "typescript": "^4.1.2",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "@craco/craco": "^6.4.3",
+    "craco-plugin-scoped-css": "^1.1.1"
   },
   "scripts": {
-    "start": "yarn craco start",
-    "build": "yarn craco build",
-    "test": "yarn craco test",
-    "eject": "yarn craco eject"
+    "start": "npx craco start",
+    "build": "npx craco build",
+    "test": "npx craco test",
+    "eject": "npx craco eject"
   },
   "eslintConfig": {
     "extends": [

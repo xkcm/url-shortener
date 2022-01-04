@@ -10,10 +10,28 @@ export enum Config {
 
 // === Errors ===
 
-export class UnknownError extends Error {}
+export class UnknownError extends Error {
+  constructor(){
+    super("Unknown error occurred")
+  }
+}
 
-export class UndefinedHashError extends Error {}
-export class IncorrectPasswordError extends Error {}
+export class UndefinedHashError extends Error {
+  constructor(opts: { hash: string }){
+    super(`Hash '${opts.hash}' does not exist`)
+  }
+}
+export class IncorrectPasswordError extends Error {
+  constructor(opts: { pass: string, hash: string }){
+    super(`Password '${opts.pass}' for hash '${opts.hash}' is incorrect`)
+  }
+}
+
+export class HashNotProvidedError extends Error {
+  constructor(){
+    super("Hash was not provided")
+  }
+}
 
 // HttpClient
 export class EndpointNotDefinedError extends Error {}

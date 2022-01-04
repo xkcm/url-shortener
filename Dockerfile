@@ -2,14 +2,12 @@ FROM node:12
 
 WORKDIR /app
 
-COPY . .
+COPY package.json .
 
-RUN npm install
+RUN yarn
 
-ENV PORT=3000
+COPY dist /app/dist
 
-EXPOSE 3000:3000
+COPY .env /app
 
-RUN npm run build
-
-CMD ["npm", "run", "start:prod"]
+CMD ["node", "dist/server/main.js"]

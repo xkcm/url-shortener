@@ -1,13 +1,12 @@
 import { config } from "app-shared/config"
-import React, { FC, useEffect, useRef, useState } from "react"
-import { useCallback } from "react"
+import React, { FC, useCallback, useEffect, useRef, useState } from "react"
 import { useParams } from "react-router-dom"
-import { UndefinedHashError } from "../../common"
+import { HashNotProvidedError } from "../../common"
 import CornerInfo from "../../components/CornerInfo/CornerInfo"
 import LoadingDots from "../../components/LoadingDots/LoadingDots"
 import { getDestination } from "../../services/Links.service"
-
 import "./HashRedirect.scss"
+
 
 const properRedirect = (destination: string) => {
   window.location.assign(destination)
@@ -29,7 +28,7 @@ const HashRedirect: FC = () => {
   }
 
   const redirectToDestination = useCallback(async () => {
-    if (!hash) throw new UndefinedHashError()
+    if (!hash) throw new HashNotProvidedError()
     const d = await getDestination(hash)
     if (d === null) {
       setJobInfo("Your link is broken :/")

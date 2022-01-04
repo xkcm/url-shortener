@@ -10,6 +10,11 @@ import { fetchHash } from "../../services/Links.service"
 import "./Home.scss"
 
 const standarizeUrl = (url: string) => {
+  
+  const res = (/^(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/).test(url)
+  if (!res) return false
+  if (!(/^https:\/\/?/.test(url))) url = 'http://'+url
+
   try {
     return new URL(url).href
   } catch (e) {
