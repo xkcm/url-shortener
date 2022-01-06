@@ -2,12 +2,12 @@ FROM node:12
 
 WORKDIR /app
 
-COPY package.json .
+COPY . .
 
-RUN yarn
+RUN yarn && yarn --cwd src/client
 
-COPY dist /app/dist
+RUN yarn build:prod
 
-COPY .env /app
+RUN rm -rf src
 
 CMD ["node", "dist/server/main.js"]

@@ -9,7 +9,7 @@ import { RedisConnectionProvider, RedisService } from './redis.service';
   imports: [ApiModule, ConfigModule.forRoot({
     isGlobal: true
   }), ServeStaticModule.forRoot({
-    rootPath: join(__dirname, '..', 'client/')
+    rootPath: join(__dirname, 'client-web-app/')
   })],
   exports: [],
   controllers: [],

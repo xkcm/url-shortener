@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
-    "postbuild:prod": "cp -r src/client/build dist/client",
+    "postbuild:prod": "cp -r src/client/build dist/server/client-web-app",
     "build": "nest build",
     "build:prod": "yarn run build && yarn run build-client",
     "build-client": "cd src/client && yarn run build",
