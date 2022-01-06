@@ -8,7 +8,7 @@
     "postbuild:prod": "cp -r src/client/build dist/server/client-web-app",
     "build": "nest build",
     "build:prod": "yarn run build && yarn run build-client",
-    "build-client": "cd src/client && yarn run build",
+    "build-client": "yarn --cwd src/client run build",
     "serve": "node dist/server/main.js",
     "start:prod": "yarn run build:prod && yarn run serve"
   },
