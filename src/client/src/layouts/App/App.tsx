@@ -12,7 +12,7 @@ export default function App(){
     let status = true
     
     status = status && await initiateConfiguration([
-      [Config.HTTP_ENDPOINT, process.env.REACT_APP_HTTP_ENDPOINT],
+      [Config.HTTP_ENDPOINT, window.location.hostname],
       [Config.APP_URL, window.location.origin],
       [Config.VERSION, "1.0.0"]
     ])
