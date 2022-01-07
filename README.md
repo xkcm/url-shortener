@@ -7,7 +7,7 @@ URL Shortening web application built with:
 
 ## Running app
 
-It is recommended to run the app with Docker. The app is built inside the container from source code.
+It is recommended to run the app with Docker.
 
 ```sh
 docker-compose up # run docker
